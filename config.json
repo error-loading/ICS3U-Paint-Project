@@ -1,0 +1,9 @@
+{
+    "config" : {
+        "tools" : {
+            "toolSize" : 1, 
+            "maxToolSize" : 100,
+            "curTool" : "brush"
+        }
+    }
+}
