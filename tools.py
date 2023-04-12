@@ -83,11 +83,15 @@ class Polygon:
     
     def endCircle(self, colour):
 
-        pygame.draw.line(screen, BLACK, self.prevCoor, self.startCoor)
+        pygame.draw.line(screen, BLACK, self.prevCoor, self.startCoor, 6)
         pygame.draw.circle(screen, (0, 0, 0), self.prevCoor, 6)
         pygame.draw.circle(screen, (0, 0, 0), self.startCoor, 6)
 
 
+
+class Eyedropper:
+    def __init__(self, x, y):
+        return screen.get_at([x, y])[:3]
 
 
 
@@ -119,13 +123,10 @@ while running:
                     continue
                 else:
                     poly.nextCircle(mx, my, 6, (0, 0, 0))
-                    cnt += 1
             
             if tool == "fill":
                 FillTool.fill(mx, my)
-                
-    if cnt > 5:
-        tool = "fill"
+
     # ----------------------------------
     # Your code goes here.
 
@@ -138,8 +139,6 @@ while running:
     pygame.draw.line(screen, (0, 0, 0), (25, 100), (25, 150))
     pygame.draw.line(screen, (0, 0, 0), (25, 150), (150, 150))
     pygame.draw.line(screen, (0, 0, 0), (150, 150), (50, 100), 4)
-    if mb[2]:
-        FillTool.fill(mx, my)
     # ----------------------------------
     pygame.display.flip()
 
