@@ -10,8 +10,10 @@ screen2 = pygame.display.set_mode((WIDTH,HEIGHT))
 
 running =True
 
-tool = "grid"
+tool = "rect"
 polygonFirst = True
+
+omx, omy = 0, 0
 
 # colours
 GREEN = (0, 255, 0)
@@ -19,7 +21,7 @@ RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
-
+pics = []
 
 class Fill:
     def __init__(self, colour, colourClicked):
@@ -106,18 +108,30 @@ class Grid:
         for i in range(0, HEIGHT, 25):
             pygame.draw.line(screen, WHITE, (-10, i), (WIDTH + 10, i), 1)
 
-
+class Paintbrush:
+  def __init__(self, size, colour, bgCol):
+    self.size = size
+    self.colour = colour
+    self.bgCol = bgCol
+  def draw(self, mx, my):
+    pygame.draw.circle(screen, self.colour, (mx, my), self.size)
+ 
 
 FillTool = Fill((0, 0, 0), (255, 255, 255))
 grid = Grid()
+pb = Paintbrush(5, BLACK, WHITE)
 
 
 
 
 cnt = 0
 
-screen.fill((255, 255, 255))
 while running:
+    screen.fill((255, 255, 255))
+
+    if len(pics) > 0:
+        screen.blit(pics[-1], (0, 0))
+
     mx, my = pygame.mouse.get_pos()
     mb = pygame.mouse.get_pressed()
 
@@ -142,20 +156,39 @@ while running:
                 FillTool.fill(mx, my)
             if tool == "grid":
                 grid.off()
+            
 
-    
+        
+        if evt.type == pygame.MOUSEBUTTONUP:
+            if tool == "rect" and omx and omy:
+                if mx-omx > 0 and my - omy > 0:
+                    x = pygame.draw.rect(screen, BLACK, (omx, omy, mx-omx, my-omy), 1)
+                elif mx-omx < 0 and my - omy > 0:
+                    x = pygame.draw.rect(screen, BLACK, (mx, omy, omx-mx, my-omy), 1)
+                elif mx-omx > 0 and my - omy < 0:
+                    x = pygame.draw.rect(screen, BLACK, (omx, my, mx-omx, omy-my), 1)
+                else:
+                    x = pygame.draw.rect(screen, BLACK, (mx, my, omx-mx, omy-my), 1)
+                back = screen.copy()
+                pics.append(back)
+                omx, omy = 0, 0
+
+    if mb[0]:
+
+        if tool == "pb":
+            pb.draw(mx, my)
+
+        if not omx and not omy:
+            omx, omy = mx, my
+        
+        elif tool == "rect" and omx and omy:
+            if mx-omx > 0 and my - omy > 0:
+                pygame.draw.rect(screen, BLACK, (omx, omy, mx-omx, my-omy), 1)
+            elif mx-omx < 0 and my - omy > 0:
+                pygame.draw.rect(screen, BLACK, (mx, omy, omx-mx, my-omy), 1)
+            elif mx-omx > 0 and my - omy < 0:
+                pygame.draw.rect(screen, BLACK, (omx, my, mx-omx, omy-my), 1)
+            else:
+                pygame.draw.rect(screen, BLACK, (mx, my, omx-mx, omy-my), 1)
+
     pygame.display.flip()
-
-running2 = True
-while running:
-    mx, my = pygame.mouse.get_pos()
-    mb = pygame.mouse.get_pressed()
-
-    for evt in pygame.event.get():
-        if evt.type == pygame.QUIT:
-            running = False
-    
-    pygame.display.flip()
-
-
-pygame.quit()
