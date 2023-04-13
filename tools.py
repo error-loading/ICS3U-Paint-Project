@@ -6,10 +6,11 @@ HEIGHT = 600
 
 
 screen = pygame.display.set_mode((WIDTH,HEIGHT))
+screen2 = pygame.display.set_mode((WIDTH,HEIGHT))
 
 running =True
 
-tool = "polygon"
+tool = "grid"
 polygonFirst = True
 
 # colours
@@ -93,9 +94,22 @@ class Eyedropper:
     def __init__(self, x, y):
         return screen.get_at([x, y])[:3]
 
+class Grid:
+    def on(self, col):
+        for i in range(0, WIDTH, 25):
+            pygame.draw.line(screen, col, (i, -10), (i, HEIGHT + 10), 1)
+        for i in range(0, HEIGHT, 25):
+            pygame.draw.line(screen, col, (-10, i), (WIDTH + 10, i), 1)
+    def off(self):
+        for i in range(0, WIDTH, 25):
+            pygame.draw.line(screen, WHITE, (i, -10), (i, HEIGHT + 10), 1)
+        for i in range(0, HEIGHT, 25):
+            pygame.draw.line(screen, WHITE, (-10, i), (WIDTH + 10, i), 1)
+
 
 
 FillTool = Fill((0, 0, 0), (255, 255, 255))
+grid = Grid()
 
 
 
@@ -126,20 +140,22 @@ while running:
             
             if tool == "fill":
                 FillTool.fill(mx, my)
+            if tool == "grid":
+                grid.off()
 
-    # ----------------------------------
-    # Your code goes here.
-
-    pygame.draw.line(screen, (0, 0, 0), (25, 25), (50, 25))
-    pygame.draw.line(screen, (0, 0, 0), (25, 25), (25, 50))
-    pygame.draw.line(screen, (0, 0, 0), (25, 50), (50, 50))
-    pygame.draw.line(screen, (0, 0, 0), (50, 50), (50, 25))
-
-    pygame.draw.line(screen, (0, 0, 0), (25, 100), (50, 100))
-    pygame.draw.line(screen, (0, 0, 0), (25, 100), (25, 150))
-    pygame.draw.line(screen, (0, 0, 0), (25, 150), (150, 150))
-    pygame.draw.line(screen, (0, 0, 0), (150, 150), (50, 100), 4)
-    # ----------------------------------
+    
     pygame.display.flip()
+
+running2 = True
+while running:
+    mx, my = pygame.mouse.get_pos()
+    mb = pygame.mouse.get_pressed()
+
+    for evt in pygame.event.get():
+        if evt.type == pygame.QUIT:
+            running = False
+    
+    pygame.display.flip()
+
 
 pygame.quit()
