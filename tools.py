@@ -10,8 +10,9 @@ screen2 = pygame.display.set_mode((WIDTH,HEIGHT))
 
 running =True
 
-tool = "rect"
+tool = "pb"
 polygonFirst = True
+pbDrew = False
 
 omx, omy = 0, 0
 
@@ -109,25 +110,49 @@ class Grid:
             pygame.draw.line(screen, WHITE, (-10, i), (WIDTH + 10, i), 1)
 
 class Paintbrush:
-  def __init__(self, size, colour, bgCol):
+  def __init__(self, size, colour, bgCol, state):
     self.size = size
     self.colour = colour
     self.bgCol = bgCol
+    self.prevCoor = (-1, -1)
+    self.state = state
   def draw(self, mx, my):
-    pygame.draw.circle(screen, self.colour, (mx, my), self.size)
+    # if it is a new stroke
+    if self.state == 0:
+        pygame.draw.circle(screen, self.colour, (mx, my), self.size)
+        self.prevCoor = (mx, my)
+        self.state = 1
+    
+    # part of prev stroke
+    elif self.state == 1:
+        deltaX = self.prevCoor[0] - mx
+        deltaY = self.prevCoor[1] - my
+        dist = (deltaX**2 + deltaY**2)**0.5
+        dist = max(deltaX, deltaY)
+
+        for d in range(int(dist)):
+            if not dist:
+                break
+            cenX = self.prevCoor[0] + d/dist * (self.prevCoor[0] - mx)
+            cenY = self.prevCoor[1] + d/dist * (self.prevCoor[1] - my)
+            pygame.draw.circle(screen, self.colour, (cenX, cenY), self.size)
+        
+        self.prevCoor = (mx, my)
+    
+
  
 
 FillTool = Fill((0, 0, 0), (255, 255, 255))
 grid = Grid()
-pb = Paintbrush(5, BLACK, WHITE)
+pb = Paintbrush(5, BLACK, WHITE, 0)
 
 
 
 
 cnt = 0
 
+screen.fill((255, 255, 255))
 while running:
-    screen.fill((255, 255, 255))
 
     if len(pics) > 0:
         screen.blit(pics[-1], (0, 0))
@@ -172,11 +197,18 @@ while running:
                 back = screen.copy()
                 pics.append(back)
                 omx, omy = 0, 0
+            if tool == "pb":
+                pb.state = 0
+                pb.prevCoor = (-1, -1)
+                pbDrew = False
+
+    if pbDrew:
+        pb.draw(mx, my)
 
     if mb[0]:
 
         if tool == "pb":
-            pb.draw(mx, my)
+            pbDrew = True
 
         if not omx and not omy:
             omx, omy = mx, my
