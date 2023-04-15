@@ -1,7 +1,7 @@
 {
-    "tool" : "pencil",
+    "tool" : "pb",
     "colour" : "(255, 255, 255)",
-    "size" : "1", 
+    "size" : "10", 
     "opacity" : "12",
     "gridDraw" : true
 }

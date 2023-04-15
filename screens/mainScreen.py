@@ -48,7 +48,7 @@ def mainScreen():
     # instatiate class objects
     alphaBrush = AlphaBrush(bg, (0,255,0,12), colourErase, size, opacity)
     grd = Grid(bg, 720, 1280, colour)
-    pb = Paintbrush(size, colour, BLACK, 0, bg)
+    pb = Paintbrush(bg, size, colour, BLACK, 0)
     pencil = Pencil(bg, colour, size)
 
     mx, my = 0, 0
@@ -73,6 +73,9 @@ def mainScreen():
                 alphaBrush.draw(mx, my)
             elif tool == "pencil":
                 pencil.draw(omx, omy, mx, my)
+            elif tool == "pb":
+                pb.draw(mx, my)
+        
 
         elif mb[2]:
             if tool == "alphaBrush" and omx!= mx and omy!=my:
@@ -80,5 +83,11 @@ def mainScreen():
             
             elif tool == "pencil":
                 pencil.erase(mx, my)
+            
+            elif tool == "pb":
+                pb.erase(mx, my)
                     
+        if not mb[0]:
+            if tool == "pb":
+                pb.state = 0
         pygame.display.flip()
