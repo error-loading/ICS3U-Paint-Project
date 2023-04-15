@@ -10,21 +10,16 @@ import multiprocessing
 import queue
 import os
 import tkinter
-import json
 
 # import local files
 from screens.mainScreen import mainScreen 
 from screens.toolbar import toolbarScreen
 from screens.stickersScreen import sticker
 
-with open("config.json") as json_file:
-    data = json.load(json_file)
 
 if __name__ == "__main__": # setup area for processes
-   
-
     # makes and starts all the processes of the different windows
-    mainScreenP = multiprocessing.Process(target=mainScreen, arg=(data["tool"], data["colour"], data["size"], data["opacity"])) # main canvas proccess
+    mainScreenP = multiprocessing.Process(target=mainScreen) # main canvas proccess
     toolbarScreenP = multiprocessing.Process(target=toolbarScreen) # toolbar processes
     stickerP = multiprocessing.Process(target=sticker) # sticker menu process
     mainScreenP.start()
