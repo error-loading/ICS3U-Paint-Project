@@ -19,8 +19,8 @@ from screens.stickersScreen import sticker
 
 if __name__ == "__main__": # setup area for processes
     # makes and starts all the processes of the different windows
-    mainScreenP = multiprocessing.Process(target=mainScreen) # main canvas proccess
     toolbarScreenP = multiprocessing.Process(target=toolbarScreen) # toolbar processes
+    mainScreenP = multiprocessing.Process(target=mainScreen) # main canvas proccess
     stickerP = multiprocessing.Process(target=sticker) # sticker menu process
     mainScreenP.start()
     toolbarScreenP.start()

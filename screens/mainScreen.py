@@ -12,15 +12,16 @@ from config import *
 
 
 # change the path to make it easier to import classes
-curPath = os.getcwd()
-sys.path.insert(0, f'{curPath}/utils')
+# curPath = os.getcwd()
+# sys.path.insert(0, f'{curPath}/utils')
+sys.path.insert(0, "..")
 
 # import classes from utils folder
-from Fill import Fill
-from AlphaBrush import AlphaBrush
-from Grid import Grid
-from Paintbrush import Paintbrush
-from Pencil import Pencil
+from utils.Fill import Fill
+from utils.AlphaBrush import AlphaBrush
+from utils.Grid import Grid
+from utils.Paintbrush import Paintbrush
+from utils.Pencil import Pencil
 
 
 # parsing the json file
@@ -56,8 +57,7 @@ def mainScreen():
     while running:
         screen.fill(BLACK)
         screen.blit(bg, (0, 0))
-        if gridDraw:
-            grd.on()
+
 
 
         for evt in pygame.event.get():
@@ -67,6 +67,7 @@ def mainScreen():
         mb = pygame.mouse.get_pressed()
         omx, omy = mx, my
         mx, my = pygame.mouse.get_pos()
+
 
         if mb[0]:
             if tool == "alphaBrush" and omx!= mx and omy!=my:
@@ -86,8 +87,13 @@ def mainScreen():
             
             elif tool == "pb":
                 pb.erase(mx, my)
+            
+            if gridDraw:
+                grd.on()
                     
         if not mb[0]:
             if tool == "pb":
                 pb.state = 0
+            if gridDraw:
+                grd.on()
         pygame.display.flip()

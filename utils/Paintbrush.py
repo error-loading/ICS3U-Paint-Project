@@ -2,7 +2,7 @@ import pygame
 
 class Paintbrush:
   def __init__(self, screen,size, colour, bgCol, state):
-    self.size = size
+    self.size = size // 2
     self.colour = colour
     self.bgCol = bgCol
     self.prevCoor = (-1, -1)
@@ -21,7 +21,6 @@ class Paintbrush:
         deltaX = self.prevCoor[0] - mx
         deltaY = self.prevCoor[1] - my
         dist = (deltaX**2 + deltaY**2)**0.5
-        dist = max(deltaX, deltaY)
 
         for d in range(int(dist)):
             if not dist:

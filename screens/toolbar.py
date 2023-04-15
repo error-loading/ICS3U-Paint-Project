@@ -1,7 +1,16 @@
+# import libraries
 import pygame
+import sys
+import json
 import os
 
 pygame.init()
+
+sys.path.insert(0, "..")
+
+# importing constants from config.py file
+from config import *
+
 
 images = []
 
@@ -21,7 +30,7 @@ def toolbarScreen():
     running = True
 
     while running:
-        screen.fill((255, 255 , 255))
+        screen.fill(BLACK)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -32,5 +41,4 @@ def toolbarScreen():
             else:
                 screen.blit(images[i], (60*(i-len(images)/2-1), images[i].get_height()))
     
-    pygame.display.flip()
-    
+        pygame.display.flip()
