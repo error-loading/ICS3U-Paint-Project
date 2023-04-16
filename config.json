@@ -1,7 +1,1 @@
-{
-    "tool" : "alphaBrush",
-    "colour" : "(255, 255, 255)",
-    "size" : "20", 
-    "opacity" : "12",
-    "gridDraw" : true
-}
+{"tool": "redo", "colour": "(255, 255, 255)", "size": "20", "opacity": "12", "gridDraw": true}

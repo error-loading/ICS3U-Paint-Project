@@ -3,6 +3,8 @@ import pygame
 import sys
 import json
 import os
+from tkinter.colorchooser import askcolor
+
 
 pygame.init()
 
@@ -12,13 +14,13 @@ sys.path.insert(0, "..")
 from config import *
 
 
-images = []
+# images = []
 
-folderDir = f"{os.getcwd()}/imgs/tools"
+# folderDir = f"{os.getcwd()}/imgs/tools"
 
-for imgs in os.listdir(folderDir):
-    img = pygame.image.load(f"{folderDir}/{imgs}")
-    images.append(img)
+# for imgs in os.listdir(folderDir):
+#     img = pygame.image.load(f"{folderDir}/{imgs}")
+#     images.append(img)
 
 bgCol = BLACK
 
@@ -132,13 +134,190 @@ def toolbarScreen():
     undoImg = pygame.image.load("imgs/tools/14.png")
     undoImg = pygame.transform.scale(undoImg, (iconSize - 10, iconSize - 10))
     screen.blit(undoImg, (undoCoor + 5, 25 + HEIGHT // 2))
+    
+    # redo
+    redoCoor = 20 * 6 + iconSize * 5
+    redoRect = pygame.Rect(redoCoor, 20 + HEIGHT // 2, iconSize, iconSize)
+    pygame.draw.rect(screen, BLACK, redoRect, 1)
+    redoImg = pygame.image.load("imgs/tools/15.png")
+    redoImg = pygame.transform.scale(redoImg, (iconSize - 10, iconSize - 10))
+    screen.blit(redoImg, (redoCoor + 5, 25 + HEIGHT // 2))
 
     
 
     while running:
+        # screen.fill(WHITE)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+        
+        selectColourRect = pygame.Rect(650, 20, 100, HEIGHT // 3)
+        pygame.draw.rect(screen, BLACK, selectColourRect)
+
+        mx, my = pygame.mouse.get_pos()
+        mb = pygame.mouse.get_pressed()
+
+        if mb[0]:
+            if pencilRect.collidepoint(pygame.mouse.get_pos()):
+                
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "pencil"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+
+            if pencilRect.collidepoint(pygame.mouse.get_pos()):
+                
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "pb"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+
+            if erasorRect.collidepoint(pygame.mouse.get_pos()):
+                
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "erasor"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+
+            if sprayRect.collidepoint(pygame.mouse.get_pos()):
+                
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "spray"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+
+            if alphaRect.collidepoint(pygame.mouse.get_pos()):
+
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "alphaBrush"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+                    
+            if lineRect.collidepoint(pygame.mouse.get_pos()):
+
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "line"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+
+            if rectangleRect.collidepoint(pygame.mouse.get_pos()):
+
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "rect"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+            if circleRect.collidepoint(pygame.mouse.get_pos()):
+
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "circle"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+
+            if eyeDropperRect.collidepoint(pygame.mouse.get_pos()):
+
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "eyeDropper"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+
+            if fillRect.collidepoint(pygame.mouse.get_pos()):
+
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "fill"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+
+            if textRect.collidepoint(pygame.mouse.get_pos()):
+
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "text"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+
+            if undoRect.collidepoint(pygame.mouse.get_pos()):
+
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "undo"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+
+            if redoRect.collidepoint(pygame.mouse.get_pos()):
+
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["tool"] = "redo"
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+            
+
+
+        # if selectColourRect.collidepoint(pygame.mouse.get_pos()):
+        #     newColour = askcolor()
+        #     print(newColour)
         
         # for i in range(len(images)):
         #     if i < len(images) / 2 - 1:
