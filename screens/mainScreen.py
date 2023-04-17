@@ -22,6 +22,7 @@ from utils.AlphaBrush import AlphaBrush
 from utils.Grid import Grid
 from utils.Paintbrush import Paintbrush
 from utils.Pencil import Pencil
+from utils.Rectangle import Rectangle
 
 
 # parsing the json file
@@ -35,7 +36,27 @@ size = int(data["size"])
 opacity = data["opacity"]
 gridDraw = data["gridDraw"]
 
+def update():
+    try:
+        with open("config.json") as json_file:
+            data = json.load(json_file)
+
+            tool = data["tool"]
+            colour = tuple(map(int, data["colour"].strip("()").split(", ")))
+            size = int(data["size"])
+            opacity = data["opacity"]
+            gridDraw = data["gridDraw"]
+            print([tool, colour, size, opacity, gridDraw])
+
+            return [tool, colour, size, opacity, gridDraw]
+    except:
+        pass
+
 colourErase = BLACK
+
+# undo/redo lists
+undo = []
+redo = []
 
 # main screen for canvas
 def mainScreen():
@@ -45,24 +66,35 @@ def mainScreen():
     bg = pygame.Surface((1280, 720))
     pygame.display.set_caption("Whiteboard")
 
+    tool, colour, size, opacity, gridDraw = update()
+
 
     # instatiate class objects
     alphaBrush = AlphaBrush(bg, (0,255,0,12), colourErase, size, opacity)
     grd = Grid(bg, 720, 1280, colour)
     pb = Paintbrush(bg, size, colour, BLACK, 0)
     pencil = Pencil(bg, colour, size)
+    rectangle = Rectangle(screen, WHITE, -1, -1)
 
     mx, my = 0, 0
 
+    undo.append(bg)
+
     while running:
         screen.fill(BLACK)
-        screen.blit(bg, (0, 0))
+        screen.blit(undo[-1], (0, 0))
 
-
+        tool, colour, size, opacity, gridDraw = list(update())
 
         for evt in pygame.event.get():
             if evt.type == pygame.QUIT: # quits the process upon being quit
                 running = False
+            
+            if evt.type == pygame.MOUSEBUTTONUP:
+                if tool == "Rectangle":
+                    rectangle.firstClicked = True
+                    bgImg = rectangle.drawPer(mx, my)
+                    undo.append(bgImg)
 
         mb = pygame.mouse.get_pressed()
         omx, omy = mx, my
@@ -76,6 +108,17 @@ def mainScreen():
                 pencil.draw(omx, omy, mx, my)
             elif tool == "pb":
                 pb.draw(mx, my)
+            elif tool == "fill":
+                fill = Fill(screen, colour, screen.get_at([mx, my])[:3])
+                fill.fill(mx, my)
+            
+            elif tool == "Rectangle":
+                if rectangle.firstClicked:
+                    rectangle.omx = mx
+                    rectangle.omy = my
+                    rectangle.firstClicked = False
+
+                rectangle.draw(mx, my)
         
 
         elif mb[2]:
@@ -88,12 +131,16 @@ def mainScreen():
             elif tool == "pb":
                 pb.erase(mx, my)
             
+            
             if gridDraw:
                 grd.on()
                     
         if not mb[0]:
             if tool == "pb":
                 pb.state = 0
+                bgImg = screen.copy()
+                undo.append(bgImg)
+
             if gridDraw:
                 grd.on()
         pygame.display.flip()

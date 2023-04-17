@@ -2,10 +2,11 @@ import queue
 import pygame
 
 class Fill:
-    def __init__(self, colour, colourClicked, screen):
+    def __init__(self, screen,  colour, colourClicked):
         self.colour = colour
         self.colourClicked = colourClicked
         self.visited = []
+        self.screen = screen
 
     def checkedVisited(self, x, y):
         if (x, y) not in self.visited:
