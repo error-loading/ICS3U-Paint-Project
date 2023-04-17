@@ -25,6 +25,7 @@ from utils.Pencil import Pencil
 from utils.Rectangle import Rectangle
 from utils.Ellipse import Ellipse
 from utils.Lines import Line
+from utils.Erasor import Erasor
 
 
 # parsing the json file
@@ -79,6 +80,7 @@ def mainScreen():
     rectangle = Rectangle(screen, colour, -1, -1)
     ellipse = Ellipse(screen, colour, -1, -1)
     line = Line(screen, colour, -1, -1)
+    erase = Erasor(screen, size, BLACK)
 
     mx, my = 0, 0
 
@@ -148,6 +150,9 @@ def mainScreen():
                     line.firstClicked = False
 
                 line.draw(mx, my)
+            
+            elif tool == "erasor":
+                erase.erase(mx, my)
         
 
         elif mb[2]:
