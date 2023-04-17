@@ -2,6 +2,7 @@ import pygame
 
 class Erasor:
     def __init__(self, screen, size, bgCol):
+        self.screen = screen
         self.size = size//2
         self.bgCol = bgCol
     

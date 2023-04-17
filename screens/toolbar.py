@@ -3,6 +3,7 @@ import pygame
 import sys
 import json
 import os
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.colorchooser import askcolor
 
 
@@ -146,6 +147,11 @@ def toolbarScreen():
         redoImg = pygame.image.load("imgs/tools/15.png")
         redoImg = pygame.transform.scale(redoImg, (iconSize - 10, iconSize - 10))
         screen.blit(redoImg, (redoCoor + 5, 25 + HEIGHT // 2))
+
+        # save
+        saveCoor = 20 * 7 + iconSize * 6
+        saveRect = pygame.Rect(saveCoor, 20 + HEIGHT // 2, iconSize, iconSize)
+        pygame.draw.rect(screen, BLACK, saveRect, 1)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -314,6 +320,14 @@ def toolbarScreen():
 
                 with open("config.json", "w") as f:
                     json.dump(data, f)
+            
+            if saveRect.collidepoint(pygame.mouse.get_pos()):
+                try: # attempts to ask user for save name of file and attempts to save
+                    print("yes")
+                    saveName = asksaveasfilename(initialfile='Untitled.png', filetypes=[("Picture files", "*.png *.jpg *.bmp"), ("All Files", "*.*")])
+                    pygame.image.save(screen.copy(), saveName)
+                except:
+                    pass
             
 
 

@@ -44,14 +44,16 @@ def update():
         with open("config.json") as json_file:
             data = json.load(json_file)
 
+            print(data)
+
             tool = data["tool"]
             colour = tuple(map(int, data["colour"].strip("()").split(", ")))
             size = int(data["size"])
             opacity = data["opacity"]
             gridDraw = data["gridDraw"]
-            print([tool, colour, size, opacity, gridDraw])
+            undoStatus = data["undoStatus"]
 
-            return [tool, colour, size, opacity, gridDraw]
+            return [tool, colour, size, opacity, gridDraw, undoStatus]
     except:
         pass
 
@@ -69,7 +71,7 @@ def mainScreen():
     bg = pygame.Surface((1280, 720))
     pygame.display.set_caption("Whiteboard")
 
-    tool, colour, size, opacity, gridDraw = update()
+    tool, colour, size, opacity, gridDraw, undoStatus = update()
 
 
     # instatiate class objects
@@ -90,7 +92,7 @@ def mainScreen():
         screen.fill(BLACK)
         screen.blit(undo[-1], (0, 0))
 
-        tool, colour, size, opacity, gridDraw = list(update())
+        tool, colour, size, opacity, gridDraw, undoStatus = list(update())
 
         for evt in pygame.event.get():
             if evt.type == pygame.QUIT: # quits the process upon being quit
@@ -127,6 +129,8 @@ def mainScreen():
             elif tool == "fill":
                 fill = Fill(screen, colour, screen.get_at([mx, my])[:3])
                 fill.fill(mx, my)
+                bgImg = screen.copy()
+                undo.append(bgImg)
             
             elif tool == "Rectangle":
                 if rectangle.firstClicked:
@@ -177,4 +181,19 @@ def mainScreen():
 
             if gridDraw:
                 grd.on()
+        
+        if undoStatus:
+            imgBack = undo.pop()
+            redo.append(imgBack)
+
+            with open("config.json") as f:
+                data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["undoStatus"] = False
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+
         pygame.display.flip()

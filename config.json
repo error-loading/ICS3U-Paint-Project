@@ -1,1 +1,8 @@
-{"tool": "line", "colour": "(255, 255, 255)", "size": "20", "opacity": "12", "gridDraw": false}
+{
+  "tool": "Rectangle",
+  "colour": "(255, 255, 255)",
+  "size": "20",
+  "opacity": "12",
+  "gridDraw": false,
+  "undoStatus": false
+}
