@@ -239,7 +239,7 @@ def toolbarScreen():
 
                 open('config.json', 'w').close()
 
-                data["tool"] = "rect"
+                data["tool"] = "Rectangle"
 
                 with open("config.json", "w") as f:
                     json.dump(data, f)
@@ -250,7 +250,7 @@ def toolbarScreen():
 
                 open('config.json', 'w').close()
 
-                data["tool"] = "circle"
+                data["tool"] = "ellipse"
 
                 with open("config.json", "w") as f:
                     json.dump(data, f)
