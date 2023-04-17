@@ -24,6 +24,7 @@ from utils.Paintbrush import Paintbrush
 from utils.Pencil import Pencil
 from utils.Rectangle import Rectangle
 from utils.Ellipse import Ellipse
+from utils.Lines import Line
 
 
 # parsing the json file
@@ -77,6 +78,7 @@ def mainScreen():
     pencil = Pencil(bg, colour, size)
     rectangle = Rectangle(screen, colour, -1, -1)
     ellipse = Ellipse(screen, colour, -1, -1)
+    line = Line(screen, colour, -1, -1)
 
     mx, my = 0, 0
 
@@ -101,6 +103,11 @@ def mainScreen():
                 elif tool == "ellipse":
                     ellipse.firstClicked = True
                     bgImg = ellipse.drawPer(mx, my)
+                    undo.append(bgImg)
+
+                elif tool == "line":
+                    line.firstClicked = True
+                    bgImg = line.drawPer(mx, my)
                     undo.append(bgImg)
 
         mb = pygame.mouse.get_pressed()
@@ -133,6 +140,14 @@ def mainScreen():
                     ellipse.firstClicked = False
 
                 ellipse.draw(mx, my)
+                
+            elif tool == "line":
+                if line.firstClicked:
+                    line.omx = mx
+                    line.omy = my
+                    line.firstClicked = False
+
+                line.draw(mx, my)
         
 
         elif mb[2]:
