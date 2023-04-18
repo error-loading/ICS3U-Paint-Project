@@ -169,7 +169,7 @@ def toolbarScreen():
         
         col = data["colour"]
 
-        pygame.draw.rect(screen, col, selectColourRect)
+        pygame.draw.rect(screen, BLACK, selectColourRect)
 
         mx, my = pygame.mouse.get_pos()
         mb = pygame.mouse.get_pressed()

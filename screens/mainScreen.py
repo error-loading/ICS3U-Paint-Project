@@ -31,6 +31,7 @@ from utils.Ellipse import Ellipse
 from utils.Lines import Line
 from utils.Erasor import Erasor
 from utils.Save import Save
+from utils.Text import Text
 
 
 # parsing the json file
@@ -95,6 +96,7 @@ def mainScreen():
     line = Line(screen, colour, -1, -1)
     erase = Erasor(screen, size, BLACK)
     save = Save(screen)
+    text = Text(screen)
 
     mx, my = 0, 0
 
@@ -109,6 +111,13 @@ def mainScreen():
         for evt in pygame.event.get():
             if evt.type == pygame.QUIT: # quits the process upon being quit
                 running = False
+            
+            if evt.type == pygame.MOUSEBUTTONUP:
+                if tool == "text":
+                    text.draw(mx, my, size, colour)
+            
+            bgImg = screen.copy()
+            undo.append(bgImg)
             
             if evt.type == pygame.MOUSEBUTTONUP:
                 if tool == "Rectangle":
