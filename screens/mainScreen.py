@@ -3,6 +3,7 @@ import pygame
 import sys
 import json
 import os
+import multiprocessing
 from tkinter import *
 from tkinter import filedialog
 
@@ -45,6 +46,12 @@ size = int(data["size"])
 opacity = data["opacity"]
 gridDraw = data["gridDraw"]
 
+# def receive_data():
+#     with multiprocessing.Manager() as manager:
+#         shared_data = manager.dict()
+#         # do something with shared_data, such as retrieve it from a multiprocessing process
+#         return dict(shared_data)
+
 def update():
     try:
         with open("config.json") as json_file:
@@ -68,6 +75,26 @@ def update():
             return [tool, colour, size, opacity, gridDraw, undoStatus, screenShot]
     except:
         pass
+
+# def update():
+#     data = receive_data()
+
+#     # print(data)
+
+#     tool = data["tool"]
+#     colour = tuple(map(int, data["colour"].strip("()").split(", ")))
+#     size = int(data["size"])
+#     opacity = data["opacity"]
+#     gridDraw = data["gridDraw"]
+#     undoStatus = data["undoStatus"]
+#     screenShot = data["screenShot"]
+
+#     returnUser = [tool, colour, size, opacity, gridDraw, undoStatus, screenShot]
+#     if returnUser == None:
+#         return ["", "", "", "", "", ""]
+
+#     return [tool, colour, size, opacity, gridDraw, undoStatus, screenShot]
+
 
 colourErase = BLACK
 

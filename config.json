@@ -1,9 +1,1 @@
-{
-  "tool": "text",
-  "colour": "(255, 255, 255)",
-  "size": "20",
-  "opacity": "12",
-  "gridDraw": false,
-  "undoStatus": false,
-  "screenShot": false
-}
+{"tool": "alphaBrush", "colour": "(255, 255, 255)", "size": "20", "opacity": "12", "gridDraw": false, "undoStatus": false, "screenShot": false}
