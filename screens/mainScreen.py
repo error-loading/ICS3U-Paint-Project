@@ -259,6 +259,14 @@ def mainScreen():
 
                 with open("config.json", "w") as f:
                     json.dump(data, f)
+            
+        # update class parameters, should hv been a method parameter
+        grd.col = colour
+        pb.colour = colour
+        pencil.colour = colour
+        rectangle.colour = colour
+        ellipse.colour = colour
+        line.colour = colour
         
 
         pygame.display.flip()
