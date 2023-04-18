@@ -169,9 +169,11 @@ def toolbarScreen():
         with open("config.json") as f:
             data = json.load(f)
         
-        col = data["colour"]
+        colour = tuple(map(int, data["colour"].strip("()").split(", ")))
 
-        pygame.draw.rect(screen, BLACK, selectColourRect)
+
+        pygame.draw.rect(screen, colour, selectColourRect)
+        pygame.draw.rect(screen, BLACK, selectColourRect, 1)
 
         mx, my = pygame.mouse.get_pos()
         mb = pygame.mouse.get_pressed()
