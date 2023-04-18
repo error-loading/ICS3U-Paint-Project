@@ -24,6 +24,8 @@ class Fill:
         return neighbors
 
     def fill(self, x, y):
+        pixelArray = pygame.PixelArray(self.screen)
+        
         if self.colour == self.colourClicked:
             return
         
@@ -35,7 +37,10 @@ class Fill:
             neighbors = self.getNeighbours(newX,newY)
 
             for neighboringNodes in neighbors:
-                if self.screen.get_at([neighboringNodes[0], neighboringNodes[1]])[:3] == self.colourClicked:
+                if pixelArray[neighboringNodes[0], neighboringNodes[1]] == self.colourClicked:
                     self.screen.set_at(neighboringNodes, self.colour)
                     q.put(neighboringNodes)
+        
+        del pixelArray
+        
         pygame.display.flip()

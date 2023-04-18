@@ -4,7 +4,6 @@ import sys
 import json
 import os
 import tkinter as tk
-import multiprocessing
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.colorchooser import askcolor
 
@@ -21,21 +20,13 @@ sys.path.insert(0, "..")
 from config import *
 
 
-# images = []
 
 folderDir = f"{os.getcwd()}"
 
-# for imgs in os.listdir(folderDir):
-#     img = pygame.image.load(f"{folderDir}/{imgs}")
-#     images.append(img)
 
 bgCol = BLACK
 hover = ""
 
-# def send_data(data):
-#     with multiprocessing.Manager() as manager:
-#         shared_data = manager.dict()
-#         shared_data.update(data)
 
 # toolbar screen 
 def toolbarScreen():
@@ -187,6 +178,9 @@ def toolbarScreen():
         
 
                 if selectColourRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(selectColourRect.topleft, selectColourRect.topright, selectColourRect.width, selectColourRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
+
                     newColour = askcolor()[0]
 
                     with open("config.json") as f:
@@ -199,24 +193,12 @@ def toolbarScreen():
                     with open("config.json", "w") as f:
                         json.dump(data, f)                
 
-                    print(newColour)
+                    
 
                 if pencilRect.collidepoint(pygame.mouse.get_pos()):
-                    
-                    with open("config.json") as f:
-                        data = json.load(f)
+                    # highLightRect = pygame.Rect(pencilRect.topleft, pencilRect.topright, pencilRect.width, pencilRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
 
-                    open('config.json', 'w').close()
-
-                    data["tool"] = "pencil"
-
-                    with open("config.json", "w") as f:
-                        json.dump(data, f)
-                    
-
-
-                if pencilRect.collidepoint(pygame.mouse.get_pos()):
-                    
                     with open("config.json") as f:
                         data = json.load(f)
 
@@ -228,6 +210,8 @@ def toolbarScreen():
                         json.dump(data, f)
 
                 if erasorRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(erasorRect.topleft, erasorRect.topright, erasorRect.width, erasorRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
                     
                     with open("config.json") as f:
                         data = json.load(f)
@@ -240,6 +224,8 @@ def toolbarScreen():
                         json.dump(data, f)
 
                 if sprayRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(sprayRect.topleft, sprayRect.topright, sprayRect.width, sprayRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
                     
                     with open("config.json") as f:
                         data = json.load(f)
@@ -252,6 +238,8 @@ def toolbarScreen():
                         json.dump(data, f)
 
                 if alphaRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(alphaRect.topleft, alphaRect.topright, alphaRect.width, alphaRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
 
                     with open("config.json") as f:
                         data = json.load(f)
@@ -264,6 +252,8 @@ def toolbarScreen():
                         json.dump(data, f)
                         
                 if lineRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(lineRect.topleft, lineRect.topright, lineRect.width, lineRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
 
                     with open("config.json") as f:
                         data = json.load(f)
@@ -276,6 +266,9 @@ def toolbarScreen():
                         json.dump(data, f)
 
                 if rectangleRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(rectangleCoor, 20, iconSize, iconSize)
+
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
 
                     with open("config.json") as f:
                         data = json.load(f)
@@ -287,6 +280,8 @@ def toolbarScreen():
                     with open("config.json", "w") as f:
                         json.dump(data, f)
                 if circleRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(circleRect.topleft, circleRect.topright, circleRect.width, circleRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
 
                     with open("config.json") as f:
                         data = json.load(f)
@@ -299,6 +294,8 @@ def toolbarScreen():
                         json.dump(data, f)
 
                 if eyeDropperRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(eyeDropperRect.topleft, eyeDropperRect.topright, eyeDropperRect.width, eyeDropperRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
 
                     with open("config.json") as f:
                         data = json.load(f)
@@ -311,6 +308,8 @@ def toolbarScreen():
                         json.dump(data, f)
 
                 if fillRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(fillRect.topleft, fillRect.topright, fillRect.width, fillRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
 
                     with open("config.json") as f:
                         data = json.load(f)
@@ -323,6 +322,8 @@ def toolbarScreen():
                         json.dump(data, f)
 
                 if textRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(textRect.topleft, textRect.topright, textRect.width, textRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
 
                     with open("config.json") as f:
                         data = json.load(f)
@@ -335,18 +336,22 @@ def toolbarScreen():
                         json.dump(data, f)
 
                 if undoRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(undoRect.topleft, undoRect.topright, undoRect.width, undoRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
 
                     with open("config.json") as f:
                         data = json.load(f)
 
                     open('config.json', 'w').close()
 
-                    data["tool"] = "undo"
+                    data["undoStatus"] = True
 
                     with open("config.json", "w") as f:
                         json.dump(data, f)
 
                 if redoRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(redoRect.topleft, redoRect.topright, redoRect.width, redoRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
 
                     with open("config.json") as f:
                         data = json.load(f)
@@ -359,6 +364,8 @@ def toolbarScreen():
                         json.dump(data, f)
                 
                 if saveRect.collidepoint(pygame.mouse.get_pos()):
+                    # highLightRect = pygame.Rect(saveRect.topleft, saveRect.topright, saveRect.width, saveRect.height)
+                    # pygame.draw.rect(screen, DARKBLUE, highLightRect)
 
                     with open("config.json") as f:
                         data = json.load(f)
@@ -370,12 +377,6 @@ def toolbarScreen():
                     with open("config.json", "w") as f:
                         json.dump(data, f)
 
-            # sending data using multiproccesses
-            # with open("config.json") as f:
-            #     data = json.load(f)
-            #     print(data)
-
-            #     send_data(data)
 
 
         pygame.display.flip()

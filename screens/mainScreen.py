@@ -140,14 +140,13 @@ def mainScreen():
                 running = False
             
             if evt.type == pygame.MOUSEBUTTONUP:
+                bgImg = screen.copy()
+                undo.append(bgImg)
+
                 if tool == "text":
                     text.draw(mx, my, size, colour)
-            
-            bgImg = screen.copy()
-            undo.append(bgImg)
-            
-            if evt.type == pygame.MOUSEBUTTONUP:
-                if tool == "Rectangle":
+                
+                elif tool == "Rectangle":
                     rectangle.firstClicked = True
                     bgImg = rectangle.drawPer(mx, my)
                     undo.append(bgImg)
