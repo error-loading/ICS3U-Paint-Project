@@ -9,7 +9,6 @@ import pygame
 import multiprocessing
 import queue
 import os
-import tkinter
 
 # import local files
 from screens.mainScreen import mainScreen 

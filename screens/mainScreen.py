@@ -3,6 +3,10 @@ import pygame
 import sys
 import json
 import os
+from tkinter import *
+from tkinter import filedialog
+
+Tk().withdraw() #hides the small extra window
 
 # intialize the pygame module
 pygame.init()
@@ -26,6 +30,7 @@ from utils.Rectangle import Rectangle
 from utils.Ellipse import Ellipse
 from utils.Lines import Line
 from utils.Erasor import Erasor
+from utils.Save import Save
 
 
 # parsing the json file
@@ -42,9 +47,10 @@ gridDraw = data["gridDraw"]
 def update():
     try:
         with open("config.json") as json_file:
+            # print('o')
             data = json.load(json_file)
 
-            print(data)
+            # print(data)
 
             tool = data["tool"]
             colour = tuple(map(int, data["colour"].strip("()").split(", ")))
@@ -52,8 +58,13 @@ def update():
             opacity = data["opacity"]
             gridDraw = data["gridDraw"]
             undoStatus = data["undoStatus"]
+            screenShot = data["screenShot"]
 
-            return [tool, colour, size, opacity, gridDraw, undoStatus]
+            returnUser = [tool, colour, size, opacity, gridDraw, undoStatus, screenShot]
+            if returnUser == None:
+                return ["", "", "", "", "", ""]
+
+            return [tool, colour, size, opacity, gridDraw, undoStatus, screenShot]
     except:
         pass
 
@@ -71,7 +82,7 @@ def mainScreen():
     bg = pygame.Surface((1280, 720))
     pygame.display.set_caption("Whiteboard")
 
-    tool, colour, size, opacity, gridDraw, undoStatus = update()
+    tool, colour, size, opacity, gridDraw, undoStatus, screenShot = update()
 
 
     # instatiate class objects
@@ -83,6 +94,7 @@ def mainScreen():
     ellipse = Ellipse(screen, colour, -1, -1)
     line = Line(screen, colour, -1, -1)
     erase = Erasor(screen, size, BLACK)
+    save = Save(screen)
 
     mx, my = 0, 0
 
@@ -92,7 +104,7 @@ def mainScreen():
         screen.fill(BLACK)
         screen.blit(undo[-1], (0, 0))
 
-        tool, colour, size, opacity, gridDraw, undoStatus = list(update())
+        tool, colour, size, opacity, gridDraw, undoStatus, screenShot = list(update())
 
         for evt in pygame.event.get():
             if evt.type == pygame.QUIT: # quits the process upon being quit
@@ -122,10 +134,13 @@ def mainScreen():
         if mb[0]:
             if tool == "alphaBrush" and omx!= mx and omy!=my:
                 alphaBrush.draw(mx, my)
+                
             elif tool == "pencil":
                 pencil.draw(omx, omy, mx, my)
+
             elif tool == "pb":
                 pb.draw(mx, my)
+
             elif tool == "fill":
                 fill = Fill(screen, colour, screen.get_at([mx, my])[:3])
                 fill.fill(mx, my)
@@ -195,5 +210,19 @@ def mainScreen():
 
                 with open("config.json", "w") as f:
                     json.dump(data, f)
+        
+        if screenShot:
+            save.ask()
+
+            with open("config.json") as f:
+                data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["screenShot"] = False
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
+        
 
         pygame.display.flip()

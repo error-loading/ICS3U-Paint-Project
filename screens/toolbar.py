@@ -3,11 +3,16 @@ import pygame
 import sys
 import json
 import os
+import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.colorchooser import askcolor
 
 
 pygame.init()
+# win = tk.Tk()
+
+# win.withdraw()
+
 
 sys.path.insert(0, "..")
 
@@ -17,7 +22,7 @@ from config import *
 
 # images = []
 
-# folderDir = f"{os.getcwd()}/imgs/tools"
+folderDir = f"{os.getcwd()}"
 
 # for imgs in os.listdir(folderDir):
 #     img = pygame.image.load(f"{folderDir}/{imgs}")
@@ -322,12 +327,27 @@ def toolbarScreen():
                     json.dump(data, f)
             
             if saveRect.collidepoint(pygame.mouse.get_pos()):
-                try: # attempts to ask user for save name of file and attempts to save
-                    print("yes")
-                    saveName = asksaveasfilename(initialfile='Untitled.png', filetypes=[("Picture files", "*.png *.jpg *.bmp"), ("All Files", "*.*")])
-                    pygame.image.save(screen.copy(), saveName)
-                except:
-                    pass
+
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data['screenShot'] = True
+
+                with open("consif.json", "w") as f:
+                    json.dump(data, f)
+
+
+
+                img = screen.copy()
+                pygame.image.save(img, f"{folderDir}/imgs/screenshots/myCanvas.png")
+                # try: # attempts to ask user for save name of file and attempts to save
+                #     saveName = asksaveasfilename(initialfile='Untitled.png', filetypes=[("Picture files", "*.png *.jpg *.bmp"), ("All Files", "*.*")])
+                #     pygame.image.save(screen.copy(), saveName)
+                # except:
+                #     pass
+
             
 
 
