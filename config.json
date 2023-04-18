@@ -1,1 +1,1 @@
-{"tool": "Rectangle", "colour": "(255, 255, 255)", "size": "5", "opacity": "12", "gridDraw": false, "undoStatus": false, "screenShot": false}
+{"tool": "ellipse", "colour": "(255, 255, 255)", "size": "5", "opacity": "12", "gridDraw": false, "undoStatus": false, "screenShot": false}

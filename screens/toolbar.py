@@ -163,12 +163,33 @@ def toolbarScreen():
                 running = False
         
         selectColourRect = pygame.Rect(650, 20, 100, HEIGHT // 3)
-        pygame.draw.rect(screen, BLACK, selectColourRect)
+
+        with open("config.json") as f:
+            data = json.load(f)
+        
+        col = data["colour"]
+
+        pygame.draw.rect(screen, col, selectColourRect)
 
         mx, my = pygame.mouse.get_pos()
         mb = pygame.mouse.get_pressed()
 
         if mb[0]:
+            if selectColourRect.collidepoint(pygame.mouse.get_pos()):
+                newColour = askcolor()[0]
+
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data['colour'] = str(newColour)
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)                
+
+                print(newColour)
+
             if pencilRect.collidepoint(pygame.mouse.get_pos()):
                 
                 with open("config.json") as f:
@@ -335,7 +356,7 @@ def toolbarScreen():
 
                 data['screenShot'] = True
 
-                with open("consif.json", "w") as f:
+                with open("config.json", "w") as f:
                     json.dump(data, f)
 
 
@@ -350,10 +371,6 @@ def toolbarScreen():
 
             
 
-
-        # if selectColourRect.collidepoint(pygame.mouse.get_pos()):
-        #     newColour = askcolor()
-        #     print(newColour)
         
         # for i in range(len(images)):
         #     if i < len(images) / 2 - 1:

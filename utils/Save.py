@@ -9,7 +9,11 @@ class Save:
         self.screen = screen
         
     def ask(self):
-        fname=filedialog.asksaveasfilename(defaultextension=".png")
+        fname = filedialog.asksaveasfilename(initialfile='Untitled.png', filetypes=[("Picture files", "*.png *.jpg *.bmp"), ("All Files", "*.*")])
+
+        if fname == "":
+            return
+
         bgImg = self.screen.copy()
 
         pygame.image.save(bgImg, fname)
