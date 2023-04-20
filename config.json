@@ -1,1 +1,1 @@
-{"tool": "alphaBrush", "colour": "(255, 0, 0)", "size": "25", "opacity": "12", "gridDraw": false, "undoStatus": true, "screenShot": false, "redoStatus": false}
+{"tool": "pencil", "colour": "(253, 135, 255)", "size": 4, "opacity": "12", "gridDraw": false, "undoStatus": false, "screenShot": false, "redoStatus": false}

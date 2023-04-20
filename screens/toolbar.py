@@ -12,6 +12,7 @@ sys.path.insert(0, "..")
 
 # import RectImgs class
 from utils.RectImgs import RectImgs
+from utils.Slider import Slider
 
 # importing constants from config.py file
 from config import *
@@ -29,6 +30,9 @@ def toolbarScreen():
     screen.fill(WHITE)
     pygame.display.set_caption("Toolbar Menu")
 
+    # instatiate stuff
+    slider = Slider(20 * 8 + HEIGHT // 3 * 7, 20 + HEIGHT // 2, 1230 - 20 * 8 - HEIGHT // 3 * 7, HEIGHT // 3)
+
     # screen info variables
     running = True
     drawing = False
@@ -36,6 +40,7 @@ def toolbarScreen():
     back = screen.copy()
 
     firstIter = True
+
 
     while running:
         # fill the background
@@ -203,8 +208,12 @@ def toolbarScreen():
 
                 drawing = True
 
+                    # Pass events to the slider object to handle
+        
+            slider.handle_event(evt)
 
-
+        # Draw the slider on the screen
+        slider.draw(screen)
         
         
         # hover over rects
@@ -250,7 +259,9 @@ def toolbarScreen():
         elif saveOb.boxRect.collidepoint(pygame.mouse.get_pos()):
             saveOb.draw_hover(DARKBLUE)
 
+
         
         pygame.display.flip()
+
     
     pygame.quit()
