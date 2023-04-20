@@ -4,12 +4,13 @@ from glob import *
 class Text:
     def __init__(self, screen):
         self.screen = screen
+        self.comicFont = font.SysFont("Comic Sans MS", 20)
+
     
-    def draw(self, mx, my, size, col):
-        comicFont = font.SysFont("Comic Sans MS", size)
+    def draw(self, mx, my, col):
 
         txt = self.getName(mx, my)
-        txtPic = comicFont.render(txt, True, (255,0,0))
+        txtPic = self.comicFont.render(txt, True, (255,0,0))
 
         self.screen.blit(txtPic,(mx,my))
 

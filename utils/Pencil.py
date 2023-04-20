@@ -1,5 +1,6 @@
 import pygame
 
+# pencil class
 class Pencil:
     def __init__(self, screen, colour, size):
         self.colour = colour

@@ -32,8 +32,5 @@ class Paintbrush:
         self.prevCoor = (mx, my)
     
   def erase(self, mx, my):
-      eraserHead = pygame.Surface((self.size,self.size),pygame.SRCALPHA)       
-      pygame.draw.circle(self.screen, self.bgCol, (self.size,self.size),self.size)
-
-      self.screen.blit(eraserHead, (mx, my))
+      pygame.draw.circle(self.screen, self.bgCol, (mx,my),self.size)
     

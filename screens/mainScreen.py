@@ -7,19 +7,9 @@ import multiprocessing
 from tkinter import *
 from tkinter import filedialog
 
-Tk().withdraw() #hides the small extra window
-
-# intialize the pygame module
-pygame.init()
-
-# import config.py for a few constants shared across multiple files
-from config import *
-
-
 # change the path to make it easier to import classes
-# curPath = os.getcwd()
-# sys.path.insert(0, f'{curPath}/utils')
 sys.path.insert(0, "..")
+
 
 # import classes from utils folder
 from utils.Fill import Fill
@@ -33,170 +23,187 @@ from utils.Lines import Line
 from utils.Erasor import Erasor
 from utils.Save import Save
 from utils.Text import Text
+from utils.Eyedropper import Eyedropper
+
+# import config.py for a few constants shared across multiple files
+from config import *
 
 
-# parsing the json file
-with open("config.json") as json_file:
-    data = json.load(json_file)
+## Intialize modules
 
-# saving the data gotten form the json file in variables to use later
-tool = data["tool"]
-colour = tuple(map(int, data["colour"].strip("()").split(", ")))
-size = int(data["size"])
-opacity = data["opacity"]
-gridDraw = data["gridDraw"]
+# Intialize the tk module and then hide the small extra window
+Tk().withdraw()
 
-# def receive_data():
-#     with multiprocessing.Manager() as manager:
-#         shared_data = manager.dict()
-#         # do something with shared_data, such as retrieve it from a multiprocessing process
-#         return dict(shared_data)
+# Intialize the pygame module
+pygame.init()
+
+
+# update function that updates values taken from the config.json file
 
 def update():
     try:
+        # load the config.json file
         with open("config.json") as json_file:
-            # print('o')
             data = json.load(json_file)
 
-            # print(data)
 
-            tool = data["tool"]
-            colour = tuple(map(int, data["colour"].strip("()").split(", ")))
-            size = int(data["size"])
-            opacity = data["opacity"]
-            gridDraw = data["gridDraw"]
-            undoStatus = data["undoStatus"]
-            screenShot = data["screenShot"]
+        # parse the json file
+        tool = data["tool"]
+        colour = tuple(map(int, data["colour"].strip("()").split(", ")))
+        size = int(data["size"])
+        opacity = data["opacity"]
+        gridDraw = data["gridDraw"]
+        undoStatus = data["undoStatus"]
+        screenShot = data["screenShot"]
+        redoStatus = data["redoStatus"]
 
-            returnUser = [tool, colour, size, opacity, gridDraw, undoStatus, screenShot]
-            if returnUser == None:
-                return ["", "", "", "", "", ""]
 
-            return [tool, colour, size, opacity, gridDraw, undoStatus, screenShot]
+        # return values taken from json file
+        returnUser = [tool, colour, size, opacity, gridDraw, undoStatus, screenShot, redoStatus]
+
+        return returnUser
     except:
         pass
 
-# def update():
-#     data = receive_data()
-
-#     # print(data)
-
-#     tool = data["tool"]
-#     colour = tuple(map(int, data["colour"].strip("()").split(", ")))
-#     size = int(data["size"])
-#     opacity = data["opacity"]
-#     gridDraw = data["gridDraw"]
-#     undoStatus = data["undoStatus"]
-#     screenShot = data["screenShot"]
-
-#     returnUser = [tool, colour, size, opacity, gridDraw, undoStatus, screenShot]
-#     if returnUser == None:
-#         return ["", "", "", "", "", ""]
-
-#     return [tool, colour, size, opacity, gridDraw, undoStatus, screenShot]
 
 
-colourErase = BLACK
-
-# undo/redo lists
-undo = []
-redo = []
-
-# main screen for canvas
+# main screen process for canvas
 def mainScreen():
-    running = True 
-    screen = pygame.display.set_mode((1280, 720))
-    pygame.draw.line(screen, BLUE, (10, 0), (10, 800), 1)
-    bg = pygame.Surface((1280, 720))
+    ## any variables that might be needed
+
+    # make these variables global for later usage and just to be careful of any issues
+    tool, colour, size, opacity, gridDraw, undoStatus, screenShot, redoStatus = update()
+
+    # undo/redo lists
+    undo = []
+    redo = []
+
+    # background colour
+    bgCol = BLACK
+
+    WIDTH = 1280
+    HEIGHT = 720
+
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen.fill(bgCol)
     pygame.display.set_caption("Whiteboard")
 
-    tool, colour, size, opacity, gridDraw, undoStatus, screenShot = update()
-
+    running = True
 
     # instatiate class objects
-    alphaBrush = AlphaBrush(bg, (0,255,0,12), colourErase, size, opacity)
-    grd = Grid(bg, 720, 1280, colour)
-    pb = Paintbrush(bg, size, colour, BLACK, 0)
-    pencil = Pencil(bg, colour, size)
-    rectangle = Rectangle(screen, colour, -1, -1)
-    ellipse = Ellipse(screen, colour, -1, -1)
-    line = Line(screen, colour, -1, -1)
-    erase = Erasor(screen, size, BLACK)
-    save = Save(screen)
+    pb = Paintbrush(screen, size, colour, bgCol, 0)
+    alphaBrush = AlphaBrush(screen, tuple(list(colour) + [int(opacity)]), bgCol, size, 0)
+    pencil = Pencil(screen, colour, size)
+    erasor = Erasor(screen, size, bgCol)
+    line = Line(screen, colour, -1, -1, size)
+    rectangle = Rectangle(screen, colour, -1, -1, size)
+    ellipse = Ellipse(screen, colour, -1, -1, size)
+    eyeDropper = Eyedropper()
+    fill = Fill(screen, colour)
     text = Text(screen)
+    save = Save(screen)
 
+
+
+
+    # give undo list starting image
+    back = screen.copy()
+    undo.append(back)
+
+    # mouse x and mouse y
     mx, my = 0, 0
 
-    undo.append(bg)
+    # if the user is currently drawing
+    drawing = False
 
+    # pygame loop
     while running:
-        screen.fill(BLACK)
-        screen.blit(undo[-1], (0, 0))
+        # fill the screen with the latest image in undo list if the user is not drawing
+        if not drawing:
+            screen.blit(undo[-1], (0, 0))
 
-        tool, colour, size, opacity, gridDraw, undoStatus, screenShot = list(update())
-
+        # event loop
         for evt in pygame.event.get():
-            if evt.type == pygame.QUIT: # quits the process upon being quit
-                running = False
-            
-            if evt.type == pygame.MOUSEBUTTONUP:
-                bgImg = screen.copy()
-                undo.append(bgImg)
 
-                if tool == "text":
-                    text.draw(mx, my, size, colour)
-                
-                elif tool == "Rectangle":
-                    rectangle.firstClicked = True
-                    bgImg = rectangle.drawPer(mx, my)
+            # if the user exits out, close the pygame window
+            if evt.type == pygame.QUIT:
+                running = False
+
+            # first iteration of user pressing mouse
+            elif evt.type == pygame.MOUSEBUTTONDOWN:
+                if tool == "eyeDropper":
+                    eyeDropper.drop(mx, my, screen)
+
+                elif tool == "fill":
+                    fill.fill(mx, my)
+                    bgImg = screen.copy()
                     undo.append(bgImg)
-                
-                elif tool == "ellipse":
-                    ellipse.firstClicked = True
-                    bgImg = ellipse.drawPer(mx, my)
-                    undo.append(bgImg)
+
+       
+
+            # first iteration of user letting go of mouse
+            elif evt.type == pygame.MOUSEBUTTONUP:
+                # change the state of the painbrush (0 for first clicked and 1 for everything else)
+                if tool == "pb":
+                    pb.state = 0
+
+                elif tool == "alphaBrush":
+                    alphaBrush.state = 0
 
                 elif tool == "line":
                     line.firstClicked = True
-                    bgImg = line.drawPer(mx, my)
-                    undo.append(bgImg)
+                    line.drawPer(mx, my)
+                
+                elif tool == "rectangle":
+                    rectangle.firstClicked = True
+                    rectangle.drawPer(mx, my)
 
+                elif tool == "ellipse":
+                    ellipse.firstClicked = True
+                    ellipse.drawPer(mx, my)
+
+                elif tool == "text":
+                    txt = text.getName(mx, my)
+                    comicFont = pygame.font.SysFont("Comic Sans MS", size)
+                    txtPic = comicFont.render(txt, True, (255,0,0))
+                    screen.blit(txtPic,(mx,my))
+                     
+
+                # append img to back of undo list
+                bgImg = screen.copy()
+                undo.append(bgImg)
+        
+                # drawing ends here
+                drawing = False
+
+        # mouse interactions
         mb = pygame.mouse.get_pressed()
         omx, omy = mx, my
         mx, my = pygame.mouse.get_pos()
 
-
+        # if the left mouse is held
         if mb[0]:
-            if tool == "alphaBrush" and omx!= mx and omy!=my:
+            # look at what tool is selected, and display it on canvas
+            if tool == "pb":
+                pb.draw(mx, my)
+                # the user is currently drawing
+                drawing = True
+            
+            elif tool == "alphaBrush" and (mx!=omx or my!=omy):
                 alphaBrush.draw(mx, my)
-                
+                # the user is currently drawing
+                drawing = True
+            
             elif tool == "pencil":
                 pencil.draw(omx, omy, mx, my)
-
-            elif tool == "pb":
-                pb.draw(mx, my)
-
-            elif tool == "fill":
-                fill = Fill(screen, colour, screen.get_at([mx, my])[:3])
-                fill.fill(mx, my)
-                bgImg = screen.copy()
-                undo.append(bgImg)
+                # the user is currently drawing
+                drawing = True
             
-            elif tool == "Rectangle":
-                if rectangle.firstClicked:
-                    rectangle.omx = mx
-                    rectangle.omy = my
-                    rectangle.firstClicked = False
+            elif tool == "erasor":
+                erasor.erase(mx, my)
+                # the user is currently drawing
+                drawing = True
 
-                rectangle.draw(mx, my)
-            elif tool == "ellipse":
-                if ellipse.firstClicked:
-                    ellipse.omx = mx
-                    ellipse.omy = my
-                    ellipse.firstClicked = False
-
-                ellipse.draw(mx, my)
-                
             elif tool == "line":
                 if line.firstClicked:
                     line.omx = mx
@@ -205,39 +212,51 @@ def mainScreen():
 
                 line.draw(mx, my)
             
-            elif tool == "erasor":
-                erase.erase(mx, my)
+            elif tool == "rectangle":
+                if rectangle.firstClicked:
+                    rectangle.omx = mx
+                    rectangle.omy = my
+                    rectangle.firstClicked = False
+
+                rectangle.draw(mx, my)
+
+            elif tool == "ellipse":
+                if ellipse.firstClicked:
+                    ellipse.omx = mx
+                    ellipse.omy = my
+                    ellipse.firstClicked = False
+
+                ellipse.draw(mx, my)
         
 
+            
+            
+
+        
+        # if the right mouse is held
         elif mb[2]:
-            if tool == "alphaBrush" and omx!= mx and omy!=my:
-                alphaBrush.erase(mx, my)
-            
-            elif tool == "pencil":
-                pencil.erase(mx, my)
-            
-            elif tool == "pb":
+            if tool == "pb":
                 pb.erase(mx, my)
             
+            if tool == "alphaBrush":
+                alphaBrush.erase(mx, my)
             
-            if gridDraw:
-                grd.on()
-                    
-        if not mb[0]:
-            if tool == "pb":
-                pb.state = 0
-                bgImg = screen.copy()
-                undo.append(bgImg)
+            if tool == "pencil":
+                pencil.erase(mx, my)
+            
+            # erasing counts as drawing ykyk
+            drawing = True
 
-            if gridDraw:
-                grd.on()
-        
+
+        # code for undo
         if undoStatus:
-            imgBack = undo.pop()
-            redo.append(imgBack)
+            # make sure your not popping from an empty list
+            if len(undo) > 1:
+                imgBack = undo.pop()
+                redo.append(imgBack)
 
-            with open("config.json") as f:
-                data = json.load(f)
+                with open("config.json") as f:
+                    data = json.load(f)
 
                 open('config.json', 'w').close()
 
@@ -245,10 +264,30 @@ def mainScreen():
 
                 with open("config.json", "w") as f:
                     json.dump(data, f)
+
+        # code for redo
+        if redoStatus:
+            # make sure if there is an item in redo list
+            if len(redo):
+                redoBack = redo.pop()
+                undo.append(redoBack)
+    
+                with open("config.json") as f:
+                    data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["redoStatus"] = False
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
         
+
+        # if user presses screeshot
         if screenShot:
             save.ask()
 
+            # reset the value in the json file
             with open("config.json") as f:
                 data = json.load(f)
 
@@ -258,14 +297,37 @@ def mainScreen():
 
                 with open("config.json", "w") as f:
                     json.dump(data, f)
-            
-        # update class parameters, should hv been a method parameter
-        grd.col = colour
-        pb.colour = colour
-        pencil.colour = colour
-        rectangle.colour = colour
-        ellipse.colour = colour
-        line.colour = colour
-        
 
+        
+        # update all these variables
+        tool, colour, size, opacity, gridDraw, undoStatus, screenShot, redoStatus = list(update())
+
+        # update class parameters, should hv been method parameters but too late now
+        pb.colour = colour
+        pb.size = size
+
+        alphaBrush.colour = colour
+        alphaBrush.size = size
+    
+        pencil.colour = colour
+        pencil.size = size
+
+        erasor.size = size
+
+        line.size = size
+        line.colour = colour
+
+        rectangle.colour = colour
+        rectangle.size = size
+
+        ellipse.colour = colour
+        ellipse.size = size
+        # flip the changes to the canvas
         pygame.display.flip()
+    
+
+
+
+    # quit the pygame module
+    pygame.quit()
+

@@ -2,9 +2,8 @@ import queue
 import pygame
 
 class Fill:
-    def __init__(self, screen,  colour, colourClicked):
+    def __init__(self, screen,  colour):
         self.colour = colour
-        self.colourClicked = colourClicked
         self.visited = []
         self.screen = screen
 
@@ -26,21 +25,26 @@ class Fill:
     def fill(self, x, y):
         pixelArray = pygame.PixelArray(self.screen)
         
-        if self.colour == self.colourClicked:
+        if self.colour == pixelArray[x, y]:
             return
         
         q = queue.LifoQueue()
         q.put((x, y))
+
+        nodes = set()
 
         while not q.empty():
             newX,newY = q.get()
             neighbors = self.getNeighbours(newX,newY)
 
             for neighboringNodes in neighbors:
-                if pixelArray[neighboringNodes[0], neighboringNodes[1]] == self.colourClicked:
-                    self.screen.set_at(neighboringNodes, self.colour)
+                if pixelArray[neighboringNodes[0], neighboringNodes[1]] == pixelArray[x, y]:
                     q.put(neighboringNodes)
+                    nodes.add(neighboringNodes)
         
+        for x, y in nodes:
+            pixelArray[x, y] = self.colour
+
         del pixelArray
         
         pygame.display.flip()

@@ -1,12 +1,13 @@
 import pygame
 
 class Ellipse:
-    def __init__(self, screen, colour, omx, omy):
+    def __init__(self, screen, colour, omx, omy, size):
         self.screen = screen
         self.omx = omx
         self.omy = omy
         self.colour = colour
         self.firstClicked = True
+        self.size = size
 
     def draw(self, mx, my):
         if mx-self.omx > 0 and my - self.omy > 0:
@@ -17,7 +18,7 @@ class Ellipse:
             ellipseRect = pygame.Rect(self.omx, my, mx-self.omx, self.omy-my)
         else:
             ellipseRect = pygame.Rect(mx, my, self.omx-mx, self.omy-my)
-        pygame.draw.ellipse(self.screen, self.colour, ellipseRect, 1)
+        pygame.draw.ellipse(self.screen, self.colour, ellipseRect, self.size)
     
     # if the mouse is up
     def drawPer(self, mx, my):
@@ -29,7 +30,7 @@ class Ellipse:
             ellipseRect = pygame.Rect(self.omx, my, mx-self.omx, self.omy-my)
         else:
             ellipseRect = pygame.Rect(mx, my, self.omx-mx, self.omy-my)
-        pygame.draw.ellipse(self.screen, self.colour, ellipseRect, 1)
+        pygame.draw.ellipse(self.screen, self.colour, ellipseRect, self.size)
 
         bgImg = self.screen.copy()
         return bgImg
