@@ -24,6 +24,7 @@ from utils.Erasor import Erasor
 from utils.Save import Save
 from utils.Text import Text
 from utils.Eyedropper import Eyedropper
+from utils.Load import Load
 
 # import config.py for a few constants shared across multiple files
 from config import *
@@ -56,10 +57,11 @@ def update():
         undoStatus = data["undoStatus"]
         screenShot = data["screenShot"]
         redoStatus = data["redoStatus"]
+        load = data["load"]
 
 
         # return values taken from json file
-        returnUser = [tool, colour, size, opacity, gridDraw, undoStatus, screenShot, redoStatus]
+        returnUser = [tool, colour, size, opacity, gridDraw, undoStatus, screenShot, redoStatus, load]
 
         return returnUser
     except:
@@ -72,7 +74,7 @@ def mainScreen():
     ## any variables that might be needed
 
     # make these variables global for later usage and just to be careful of any issues
-    tool, colour, size, opacity, gridDraw, undoStatus, screenShot, redoStatus = update()
+    tool, colour, size, opacity, gridDraw, undoStatus, screenShot, redoStatus, load = update()
 
     # undo/redo lists
     undo = []
@@ -102,6 +104,7 @@ def mainScreen():
     fill = Fill(screen, colour)
     text = Text(screen)
     save = Save(screen)
+    loadOb = Load(screen)
 
 
 
@@ -165,7 +168,7 @@ def mainScreen():
                 elif tool == "text":
                     txt = text.getName(mx, my)
                     comicFont = pygame.font.SysFont("Comic Sans MS", size)
-                    txtPic = comicFont.render(txt, True, (255,0,0))
+                    txtPic = comicFont.render(txt, True, colour)
                     screen.blit(txtPic,(mx,my))
                      
 
@@ -297,10 +300,29 @@ def mainScreen():
 
                 with open("config.json", "w") as f:
                     json.dump(data, f)
+        
+        # if user presses load bitmap
+        if load:
+            fname = loadOb.ask()
+            if fname:
+                loadBgImg = pygame.image.load(fname)
+                undo.append(loadBgImg)
+
+
+            # reset the value in the json file
+            with open("config.json") as f:
+                data = json.load(f)
+
+                open('config.json', 'w').close()
+
+                data["load"] = False
+
+                with open("config.json", "w") as f:
+                    json.dump(data, f)
 
         
         # update all these variables
-        tool, colour, size, opacity, gridDraw, undoStatus, screenShot, redoStatus = list(update())
+        tool, colour, size, opacity, gridDraw, undoStatus, screenShot, redoStatus, load = list(update())
 
         # update class parameters, should hv been method parameters but too late now
         pb.colour = colour

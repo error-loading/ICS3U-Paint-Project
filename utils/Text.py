@@ -10,7 +10,7 @@ class Text:
     def draw(self, mx, my, col):
 
         txt = self.getName(mx, my)
-        txtPic = self.comicFont.render(txt, True, (255,0,0))
+        txtPic = self.comicFont.render(txt, True, col)
 
         self.screen.blit(txtPic,(mx,my))
 

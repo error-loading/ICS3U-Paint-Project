@@ -1,7 +1,7 @@
 '''
 main.py
 Gurjas Dhillon
-this program lauches all the processes. it starts the three separate windows using a library called multiprocess
+this program launches all the processes. it starts the three separate windows using a library called multiprocess
 '''
 
 # import libraries

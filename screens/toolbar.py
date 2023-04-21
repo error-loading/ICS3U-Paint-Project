@@ -66,9 +66,9 @@ def toolbarScreen():
         erasorCoor = 20 * 4 + iconSize * 3
         erasorOb = RectImgs(screen, erasorCoor, 20, iconSize, 1)
 
-        # sprayCan
-        sprayCoor = 20 * 5 + iconSize * 4
-        sprayOb = RectImgs(screen, sprayCoor, 20, iconSize, 4)
+        # loadCan
+        loadCoor = 20 * 5 + iconSize * 4
+        loadOb = RectImgs(screen, loadCoor, 20, iconSize, 19)
 
         # lines
         lineCoor = 20 * 6 + iconSize * 5
@@ -115,7 +115,9 @@ def toolbarScreen():
 
         with open("config.json") as f:
             data = json.load(f)
+
         
+        # the colour tuple is in a string, this code decodes that back into a normal python tuple
         colour = tuple(map(int, data["colour"].strip("()").split(", ")))
 
 
@@ -150,9 +152,9 @@ def toolbarScreen():
                     erasorOb.tool_name("erasor")
                     back = erasorOb.draw_clicked(YELLOW, 3)
                 
-                elif sprayOb.boxRect.collidepoint(pygame.mouse.get_pos()):
-                    sprayOb.tool_name("spray")
-                    back = sprayOb.draw_clicked(YELLOW, 3)
+                elif loadOb.boxRect.collidepoint(pygame.mouse.get_pos()):
+                    loadOb.tool_status("load")
+                    back = loadOb.draw_clicked(YELLOW, 3)
                     
                 elif lineOb.boxRect.collidepoint(pygame.mouse.get_pos()):
                     lineOb.tool_name("line")
@@ -193,15 +195,16 @@ def toolbarScreen():
                 elif colourOb.boxRect.collidepoint(pygame.mouse.get_pos()):
                     newColour = askcolor()[0]
 
-                    with open("config.json") as f:
-                        data = json.load(f)
+                    if newColour != "":
+                        with open("config.json") as f:
+                            data = json.load(f)
 
-                    open('config.json', 'w').close()
+                        open('config.json', 'w').close()
 
-                    data['colour'] = str(newColour)
+                        data['colour'] = str(newColour)
 
-                    with open("config.json", "w") as f:
-                        json.dump(data, f)          
+                        with open("config.json", "w") as f:
+                            json.dump(data, f)          
 
 
 
@@ -229,8 +232,8 @@ def toolbarScreen():
         elif erasorOb.boxRect.collidepoint(pygame.mouse.get_pos()):
             erasorOb.draw_hover(DARKBLUE)
         
-        elif sprayOb.boxRect.collidepoint(pygame.mouse.get_pos()):
-            sprayOb.draw_hover(DARKBLUE)
+        elif loadOb.boxRect.collidepoint(pygame.mouse.get_pos()):
+            loadOb.draw_hover(DARKBLUE)
         
         elif lineOb.boxRect.collidepoint(pygame.mouse.get_pos()):
             lineOb.draw_hover(DARKBLUE)
@@ -258,6 +261,9 @@ def toolbarScreen():
 
         elif saveOb.boxRect.collidepoint(pygame.mouse.get_pos()):
             saveOb.draw_hover(DARKBLUE)
+        
+        elif colourOb.boxRect.collidepoint(pygame.mouse.get_pos()):
+            colourOb.draw_hover(DARKBLUE)
 
 
         

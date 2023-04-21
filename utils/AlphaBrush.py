@@ -25,6 +25,3 @@ class AlphaBrush:
         pygame.draw.circle(eraserHead,tuple(list(self.bgCol) + [22]),(self.size,self.size),self.size)    
 
         self.screen.blit(eraserHead, (mx, my))
-
-
-    
