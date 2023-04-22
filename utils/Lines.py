@@ -1,3 +1,11 @@
+'''
+Gurjas Singh Dhillon
+
+Lines.py
+
+this file is for the Lines tool. it has the same logic as the other shapes
+'''
+
 import pygame
 
 class Line:

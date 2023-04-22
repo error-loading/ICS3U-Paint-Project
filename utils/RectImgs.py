@@ -1,3 +1,11 @@
+'''
+Gurjas Singh Dhillon
+
+Stamps.py
+
+this class is for adding the rects for each tool to the the toolMenu
+'''
+
 import pygame
 import sys
 import json
@@ -21,10 +29,13 @@ class RectImgs:
         
         self.screen.blit(self.img, (x+5, y+5))
 
+
+    # while mouse is colliding point with the boxRect
     def draw_hover (self, col):
         selectedPencilRect = pygame.Rect(self.x, self.y, self.side, self.side)
         pygame.draw.rect(self.screen, col, selectedPencilRect, 1)
     
+    # if the mouse clicks the box
     def draw_clicked(self, col, thickness):
         selectedPencilRect = pygame.Rect(self.x, self.y, self.side, self.side)
         pygame.draw.rect(self.screen, col, selectedPencilRect, thickness)
@@ -32,6 +43,7 @@ class RectImgs:
         back = self.screen.copy()
         return back
 
+    # change the tool value in the json file
     def tool_name (self, tool):
         with open("config.json") as f:
             data = json.load(f)
@@ -43,6 +55,7 @@ class RectImgs:
         with open("config.json", "w") as f:
             json.dump(data, f)
 
+    # change the boolean value for keys in the json file
     def tool_status (self, tool):
         with open("config.json") as f:
             data = json.load(f)

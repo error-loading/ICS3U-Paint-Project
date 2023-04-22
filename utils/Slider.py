@@ -1,3 +1,12 @@
+'''
+Gurjas Singh Dhillon
+
+Slider.py
+
+this file is for the slider that decides the thickness of every tool
+'''
+
+# import libraries
 import pygame
 import json
 import sys
@@ -15,14 +24,17 @@ class Slider:
         self.dragging = False  
 
     def draw(self, surface):
+        # background rectangle of the slider
         pygame.draw.rect(surface, (200, 200, 200), (self.x, self.y, self.width, self.height))
+
+        # handle of the slider
         handle_pos = max(self.x, min(self.x + self.width * self.value - self.height/2, self.x + self.width - self.height))
         pygame.draw.rect(surface, (100, 100, 100), (handle_pos, self.y, self.height, self.height))
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            pos = pygame.mouse.get_pos()
-            if self.x <= pos[0] <= self.x + self.width and self.y <= pos[1] <= self.y + self.height:
+            mx, my = pygame.mouse.get_pos()
+            if self.x <= mx <= self.x + self.width and self.y <= my <= self.y + self.height:
                 self.dragging = True
 
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
@@ -40,8 +52,8 @@ class Slider:
 
 
         if event.type == pygame.MOUSEMOTION and self.dragging:
-            pos = pygame.mouse.get_pos()
-            self.value = min(1.0, max(0.0, (pos[0] - self.x) / self.width))
+            mx, my = pygame.mouse.get_pos()
+            self.value = min(1, max(0, (mx - self.x) / self.width))
 
     def get_value(self):
         return self.value

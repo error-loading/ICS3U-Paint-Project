@@ -82,7 +82,7 @@ def mainScreen():
     redo = []
 
     # background colour
-    bgCol = BLACK
+    bgCol = (40, 40, 40)
 
     WIDTH = 1280
     HEIGHT = 720

@@ -1,5 +1,14 @@
+'''
+Gurjas Singh Dhillon
+
+Erasor.py
+
+this file is for the erasor tool. it draws a circle with the same colour as the background 
+'''
+
 import pygame
 
+# eraser class
 class Erasor:
     def __init__(self, screen, size, bgCol):
         self.screen = screen

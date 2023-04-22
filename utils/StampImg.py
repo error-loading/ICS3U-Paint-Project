@@ -1,3 +1,11 @@
+'''
+Gurjas Singh Dhillon
+
+StampImg.py
+
+this class is for placing the stamps on the mainscreen. same logic as the rectangle tool
+'''
+
 import pygame
 
 class StampImg:
@@ -8,7 +16,9 @@ class StampImg:
         self.firstClicked = True
         self.img = pygame.image.load(img)
 
+    # mouse in motion
     def draw(self, mx, my):
+        # trying all combinations
         if mx-self.omx > 0 and my - self.omy > 0:
             newImg = pygame.transform.scale(self.img, (abs(mx-self.omx), abs(my-self.omy)))
             self.screen.blit(newImg, (self.omx, self.omy))
@@ -26,7 +36,7 @@ class StampImg:
             self.screen.blit(newImg, (mx, my))
 
     
-    # if the mouse is up
+    # if the mouse is up, last time this instance of the mouse is drawn, it later sends back a screenshot which is appended to the undo list
     def drawPer(self, mx, my):
         if mx-self.omx > 0 and my - self.omy > 0:
             newImg = pygame.transform.scale(self.img, (abs(mx-self.omx), abs(my-self.omy)))
