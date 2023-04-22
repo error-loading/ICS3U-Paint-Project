@@ -25,6 +25,7 @@ from utils.Save import Save
 from utils.Text import Text
 from utils.Eyedropper import Eyedropper
 from utils.Load import Load
+from utils.StampImg import StampImg
 
 # import config.py for a few constants shared across multiple files
 from config import *
@@ -106,6 +107,12 @@ def mainScreen():
     save = Save(screen)
     loadOb = Load(screen)
 
+    # class objects for stamps
+    stamp1 = StampImg(screen, -1, -1, "imgs/stamps/sport1.png")
+    stamp2 = StampImg(screen, -1, -1, "imgs/stamps/sport2.png")
+    stamp3 = StampImg(screen, -1, -1, "imgs/stamps/sport3.png")
+    stamp4 = StampImg(screen, -1, -1, "imgs/stamps/sport4.png")
+    stamp5 = StampImg(screen, -1, -1, "imgs/stamps/sport5.png")
 
 
 
@@ -170,6 +177,27 @@ def mainScreen():
                     comicFont = pygame.font.SysFont("Comic Sans MS", size)
                     txtPic = comicFont.render(txt, True, colour)
                     screen.blit(txtPic,(mx,my))
+
+                elif tool == "stamp1":
+                    stamp1.firstClicked = True
+                    stamp1.drawPer(mx, my)
+
+                elif tool == "stamp2":
+                    stamp2.firstClicked = True
+                    stamp2.drawPer(mx, my)
+
+                elif tool == "stamp3":
+                    stamp3.firstClicked = True
+                    stamp3.drawPer(mx, my)
+
+                elif tool == "stamp4":
+                    stamp4.firstClicked = True
+                    stamp4.drawPer(mx, my)
+
+                elif tool == "stamp5":
+                    stamp5.firstClicked = True
+                    stamp5.drawPer(mx, my)
+
                      
 
                 # append img to back of undo list
@@ -230,6 +258,46 @@ def mainScreen():
                     ellipse.firstClicked = False
 
                 ellipse.draw(mx, my)
+
+            elif tool == "stamp1":
+                if stamp1.firstClicked:
+                    stamp1.omx = mx
+                    stamp1.omy = my
+                    stamp1.firstClicked = False
+
+                stamp1.draw(mx, my)
+
+            elif tool == "stamp2":
+                if stamp2.firstClicked:
+                    stamp2.omx = mx
+                    stamp2.omy = my
+                    stamp2.firstClicked = False
+
+                stamp2.draw(mx, my)
+
+            elif tool == "stamp3":
+                if stamp3.firstClicked:
+                    stamp3.omx = mx
+                    stamp3.omy = my
+                    stamp3.firstClicked = False
+
+                stamp3.draw(mx, my)
+
+            elif tool == "stamp4":
+                if stamp4.firstClicked:
+                    stamp4.omx = mx
+                    stamp4.omy = my
+                    stamp4.firstClicked = False
+
+                stamp4.draw(mx, my)
+
+            elif tool == "stamp5":
+                if stamp5.firstClicked:
+                    stamp5.omx = mx
+                    stamp5.omy = my
+                    stamp5.firstClicked = False
+
+                stamp5.draw(mx, my)
         
 
             
