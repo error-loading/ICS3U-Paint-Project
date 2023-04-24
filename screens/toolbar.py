@@ -199,7 +199,6 @@ def toolbarScreen():
                         with open("config.json") as f:
                             data = json.load(f)
 
-                        open('config.json', 'w').close()
 
                         data['colour'] = str(newColour)
 

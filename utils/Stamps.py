@@ -50,7 +50,6 @@ class Stamps:
         with open("config.json") as f:
             data = json.load(f)
 
-        open('config.json', 'w').close()
 
         data["tool"] = tool
 
@@ -62,7 +61,6 @@ class Stamps:
         with open("config.json") as f:
             data = json.load(f)
 
-        open('config.json', 'w').close()
 
         data[tool] = True
 

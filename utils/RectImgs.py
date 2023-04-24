@@ -48,7 +48,6 @@ class RectImgs:
         with open("config.json") as f:
             data = json.load(f)
 
-        open('config.json', 'w').close()
 
         data["tool"] = tool
 
@@ -60,7 +59,6 @@ class RectImgs:
         with open("config.json") as f:
             data = json.load(f)
 
-        open('config.json', 'w').close()
 
         data[tool] = True
 

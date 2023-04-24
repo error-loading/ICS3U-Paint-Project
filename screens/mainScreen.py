@@ -43,12 +43,11 @@ pygame.init()
 # update function that updates values taken from the config.json file
 
 def update():
-    try:
-        # load the config.json file
-        with open("config.json") as json_file:
-            data = json.load(json_file)
+    # load the config.json file
+    with open("config.json") as json_file:
+        data = json.load(json_file)
 
-
+    if data:
         # parse the json file
         tool = data["tool"]
         colour = tuple(map(int, data["colour"].strip("()").split(", ")))
@@ -65,8 +64,11 @@ def update():
         returnUser = [tool, colour, size, opacity, gridDraw, undoStatus, screenShot, redoStatus, load]
 
         return returnUser
-    except:
-        pass
+    
+    else:
+        returnUser = ["pb", (130, 80, 167), 5, "5", False, False, False, False, False]
+
+        return returnUser
 
 
 
@@ -329,8 +331,6 @@ def mainScreen():
                 with open("config.json") as f:
                     data = json.load(f)
 
-                open('config.json', 'w').close()
-
                 data["undoStatus"] = False
 
                 with open("config.json", "w") as f:
@@ -346,8 +346,6 @@ def mainScreen():
                 with open("config.json") as f:
                     data = json.load(f)
 
-                open('config.json', 'w').close()
-
                 data["redoStatus"] = False
 
                 with open("config.json", "w") as f:
@@ -362,12 +360,11 @@ def mainScreen():
             with open("config.json") as f:
                 data = json.load(f)
 
-                open('config.json', 'w').close()
 
-                data["screenShot"] = False
+            data["screenShot"] = False
 
-                with open("config.json", "w") as f:
-                    json.dump(data, f)
+            with open("config.json", "w") as f:
+                json.dump(data, f)
         
         # if user presses load bitmap
         if load:
@@ -381,12 +378,11 @@ def mainScreen():
             with open("config.json") as f:
                 data = json.load(f)
 
-                open('config.json', 'w').close()
 
-                data["load"] = False
+            data["load"] = False
 
-                with open("config.json", "w") as f:
-                    json.dump(data, f)
+            with open("config.json", "w") as f:
+                json.dump(data, f)
 
         
         # update all these variables
@@ -420,4 +416,3 @@ def mainScreen():
 
     # quit the pygame module
     pygame.quit()
-

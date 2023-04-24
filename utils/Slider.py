@@ -42,8 +42,7 @@ class Slider:
             
             with open("config.json") as f:
                 data = json.load(f)
-            
-            open("config.json").close()
+
 
             data["size"] = int(self.value * 50)
 

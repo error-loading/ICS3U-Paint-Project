@@ -18,9 +18,6 @@ class Eyedropper:
         with open("config.json") as f:
             data = json.load(f)
 
-        # delete the config.json file
-        open('config.json', 'w').close()
-
         # change the colour value of the python dicitonary, "data" 
         data["colour"] = str(col)
 
